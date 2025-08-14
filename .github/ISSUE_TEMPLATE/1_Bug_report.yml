@@ -3,18 +3,18 @@ description: "Report something that's broken."
 body:
   - type: markdown
     attributes:
-      value: "Please read [our full contribution guide](https://laravel.com/docs/contributions#bug-reports) before submitting bug reports. If you notice improper DocBlock, PHPStan, or IDE warnings while using Laravel, do not create a GitHub issue. Instead, please submit a pull request to fix the problem."
+      value: "Please read [our full contribution guide](https://codenteq.com/contributor-covenant-code-of-conduct/) before submitting bug reports. If you notice improper DocBlock, PHPStan, or IDE warnings while using Codenteq, do not create a GitHub issue. Instead, please submit a pull request to fix the problem."
   - type: input
     attributes:
-      label: Cashier Iyzico Version
-      description: Provide the Cashier Iyzico version that you are using.
+      label: Codenteq Iyzico Version
+      description: Provide the Codenteq Iyzico version that you are using.
       placeholder: Version
     validations:
       required: true
   - type: input
     attributes:
-      label: Laravel Version
-      description: Provide the Laravel version that you are using. [Please ensure it is still supported.](https://laravel.com/docs/releases#support-policy)
+      label: Codenteq Version
+      description: Provide the Codenteq version that you are using. [Please ensure it is still supported.](https://codenteq.com/contributor-covenant-code-of-conduct/)
       placeholder: Version
     validations:
       required: true
