@@ -6,6 +6,7 @@ use App\Models\User;
 use Codenteq\Iyzico\Enums\PaymentIntervalEnum;
 use Codenteq\Iyzico\Enums\SubscriptionStatusEnum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Iyzipay\Model\Subscription\SubscriptionPricingPlan;
 use Iyzipay\Model\Subscription\SubscriptionProduct;
 use Iyzipay\Options;
@@ -36,7 +37,7 @@ class RetrySubscriptionTest extends TestCase
 
         $productRequest = new SubscriptionCreateProductRequest;
 
-        $productRequest->setName('Laravel Cashier Iyzico Product '.random_int(1, 1000));
+        $productRequest->setName('Laravel Cashier Iyzico Product '. Str::uuid()->toString());
 
         $this->product = SubscriptionProduct::create($productRequest, $this->options);
 
@@ -61,7 +62,12 @@ class RetrySubscriptionTest extends TestCase
             ->create([
                 'pricing_plan_reference_code' => $this->paymentPlan->getReferenceCode(),
                 'status' => SubscriptionStatusEnum::ACTIVE->value,
-                'price' => $this->paymentPlan->getPrice(),
+                'invoice' => [
+                    'basePrice' =>  $this->paymentPlan->getPrice(),
+                    'taxPrice' => 0,
+                    'taxRate' => 0,
+                    'totalPrice' => $this->paymentPlan->getPrice(),
+                ],
                 'customer' => [
                     'name' => 'Ahmet Sefa',
                     'surname' => 'Arsiv',
@@ -92,6 +98,8 @@ class RetrySubscriptionTest extends TestCase
                 ],
             ]);
 
-        $this->assertTrue($subscription->retry());
+        dd($subscription->retry());
+
+        $this->ex();
     }
 }

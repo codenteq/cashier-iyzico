@@ -31,6 +31,7 @@ class SubscriptionBuilder
 
     /**
      * Set the trial period in days.
+     * @throws SubscriptionException
      */
     public function trialDays(int $trialDays): self
     {
@@ -118,22 +119,6 @@ class SubscriptionBuilder
     }
 
     /**
-     * Preview subscription details without creating.
-     */
-    public function preview(): array
-    {
-        return [
-            'owner_id' => $this->owner->getKey(),
-            'name' => $this->name,
-            'plan' => $this->plan,
-            'trial_days' => $this->trialDays,
-            'skip_trial' => $this->skipTrial,
-            'trial_ends_at' => $this->getTrialExpiration(),
-            'metadata' => $this->metadata,
-        ];
-    }
-
-    /**
      * Validate trial days input.
      *
      * @throws SubscriptionException
@@ -156,19 +141,53 @@ class SubscriptionBuilder
      */
     private function validateCreateData(array $data): void
     {
-        $requiredFields = ['price'];
+        $this->validateRequiredFields($data);
+        $this->validateInvoiceData($data);
+        $this->validateBusinessRules();
+    }
+
+    private function validateRequiredFields(array $data): void
+    {
+        $requiredFields = ['invoice'];
 
         foreach ($requiredFields as $field) {
             if (!isset($data[$field])) {
                 throw new SubscriptionException("Required field '{$field}' is missing");
             }
         }
+    }
 
-        if (isset($data['price']) && (!is_numeric($data['price']) || $data['price'] <= 0)) {
-            throw new SubscriptionException('Price must be a positive number');
+    private function validateInvoiceData(array $data): void
+    {
+        if (!isset($data['invoice'])) {
+            return;
         }
 
-        // Check if user already has an active subscription with the same name
+        $invoice = $data['invoice'];
+        $requiredInvoiceFields = ['basePrice', 'taxPrice', 'totalPrice'];
+
+        foreach ($requiredInvoiceFields as $field) {
+            if (!isset($invoice[$field])) {
+                throw new SubscriptionException("Invoice field '{$field}' is missing");
+            }
+        }
+
+        $basePrice = (float) $invoice['basePrice'];
+        $taxPrice = (float) $invoice['taxPrice'];
+        $totalPrice = (float) $invoice['totalPrice'];
+
+        if ($basePrice < 0 || $taxPrice < 0 || $totalPrice < 0) {
+            throw new SubscriptionException('Invoice prices cannot be negative');
+        }
+
+        $calculatedTotal = $basePrice + $taxPrice;
+        if (abs($calculatedTotal - $totalPrice) > 0.01) {
+            throw new SubscriptionException('Total price does not match base and tax prices');
+        }
+    }
+
+    private function validateBusinessRules(): void
+    {
         if ($this->hasActiveSubscription()) {
             throw new SubscriptionException(
                 "User already has an active subscription with name '{$this->name}'"
@@ -200,7 +219,7 @@ class SubscriptionBuilder
             'iyzico_id' => $response->getReferenceCode(),
             'iyzico_status' => $response->getSubscriptionStatus(),
             'iyzico_plan' => $this->plan,
-            'iyzico_price' => $data['price'],
+            'iyzico_price' => $data['invoice']['totalPrice'],
             'trial_ends_at' => $this->getTrialExpiration(),
             'ends_at' => null,
         ];

@@ -7,6 +7,7 @@ use Codenteq\Iyzico\Enums\PaymentIntervalEnum;
 use Codenteq\Iyzico\Enums\SubscriptionStatusEnum;
 use Codenteq\Iyzico\Enums\UpgradePeriodEnum;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Iyzipay\Model\Subscription\SubscriptionPricingPlan;
 use Iyzipay\Model\Subscription\SubscriptionProduct;
 use Iyzipay\Options;
@@ -39,13 +40,13 @@ class UpgradeSubscriptionTest extends TestCase
 
         $productRequest = new SubscriptionCreateProductRequest;
 
-        $productRequest->setName('Laravel Cashier Iyzico Product '.random_int(1, 1000));
+        $productRequest->setName('Laravel Cashier Iyzico Product '. Str::uuid()->toString());
 
         $this->product = SubscriptionProduct::create($productRequest, $this->options);
 
         $paymentPlanRequest = new SubscriptionCreatePricingPlanRequest;
 
-        $paymentPlanRequest->setName('Premium Plan');
+        $paymentPlanRequest->setName('Standart Plan'. Str::uuid()->toString());
         $paymentPlanRequest->setProductReferenceCode($this->product->getReferenceCode());
         $paymentPlanRequest->setPlanPaymentType('RECURRING');
         $paymentPlanRequest->setPaymentIntervalCount(1);
@@ -55,7 +56,7 @@ class UpgradeSubscriptionTest extends TestCase
 
         $paymentPlanRequest2 = new SubscriptionCreatePricingPlanRequest;
 
-        $paymentPlanRequest2->setName('Premium Plan');
+        $paymentPlanRequest2->setName('Premium Plan'. Str::uuid()->toString());
         $paymentPlanRequest2->setProductReferenceCode($this->product->getReferenceCode());
         $paymentPlanRequest2->setPlanPaymentType('RECURRING');
         $paymentPlanRequest2->setPaymentIntervalCount(1);
@@ -75,7 +76,12 @@ class UpgradeSubscriptionTest extends TestCase
             ->create([
                 'pricing_plan_reference_code' => $this->paymentPlan->getReferenceCode(),
                 'status' => SubscriptionStatusEnum::ACTIVE->value,
-                'price' => $this->paymentPlan->getPrice(),
+                'invoice' => [
+                    'basePrice' =>  $this->paymentPlan->getPrice(),
+                    'taxPrice' => 0,
+                    'taxRate' => 0,
+                    'totalPrice' => $this->paymentPlan->getPrice(),
+                ],
                 'customer' => [
                     'name' => 'Ahmet Sefa',
                     'surname' => 'Arsiv',
