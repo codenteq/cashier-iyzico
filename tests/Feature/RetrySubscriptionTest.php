@@ -54,7 +54,7 @@ class RetrySubscriptionTest extends TestCase
         $this->paymentPlan = SubscriptionPricingPlan::create($paymentPlanRequest, $this->options);
     }
 
-    public function test_user_can_retry_subscription()
+    public function test_user_can_retry_subscription_return_false()
     {
         $user = User::factory()->create();
 
@@ -91,13 +91,13 @@ class RetrySubscriptionTest extends TestCase
                 ],
                 'card' => [
                     'cardHolderName' => 'Ahmet Sefa Arsiv',
-                    'cardNumber' => '4111111111111129',
+                    'cardNumber' => '5528790000000008',
                     'expireMonth' => '12',
                     'expireYear' => '2030',
                     'cvc' => '123',
                 ],
             ]);
 
-        $this->ex();
+        $this->assertFalse($subscription->retry());
     }
 }
