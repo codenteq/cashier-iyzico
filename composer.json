@@ -25,6 +25,7 @@
         }
     ],
     "require": {
+        "dompdf/dompdf": "dev-master",
         "iyzico/iyzipay-php": "^2.0"
     },
     "funding": [

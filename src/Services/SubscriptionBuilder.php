@@ -220,6 +220,9 @@ class SubscriptionBuilder
             'iyzico_status' => $response->getSubscriptionStatus(),
             'iyzico_plan' => $this->plan,
             'iyzico_price' => $data['invoice']['totalPrice'],
+            'base_price' => $data['invoice']['basePrice'],
+            'tax_price' => $data['invoice']['taxPrice'],
+            'tax_rate' => $data['invoice']['taxRate'],
             'trial_ends_at' => $this->getTrialExpiration(),
             'ends_at' => null,
         ];

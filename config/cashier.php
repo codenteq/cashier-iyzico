@@ -1,5 +1,7 @@
 <?php
 
+use Codenteq\Iyzico\Services\InvoiceRendererService;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -66,4 +68,19 @@ return [
     */
 
     'model' => env('CASHIER_MODEL', App\Models\User::class),
+
+     /*
+    |--------------------------------------------------------------------------
+    | Invoice Settings
+    |--------------------------------------------------------------------------
+    |
+    | The following options determine how Cashier invoices are converted from
+    | HTML into PDFs. You're free to change the options based on the needs
+    | of your application or your preferences regarding invoice styling.
+    |
+    */
+
+    'invoices' => [
+        'renderer' => env('CASHIER_INVOICE_RENDERER', InvoiceRendererService::class),
+    ],
 ];

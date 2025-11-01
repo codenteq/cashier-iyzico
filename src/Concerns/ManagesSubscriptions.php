@@ -219,7 +219,7 @@ trait ManagesSubscriptions
     /**
      * Find subscription by Iyzico ID.
      */
-    public function findSubscriptionByIyzicoId(string $iyzicoId): ?Subscription
+    public function findSubscriptionByIyzicoId(string $iyzicoId): Subscription
     {
         return $this->subscriptions()
             ->where('iyzico_id', $iyzicoId)

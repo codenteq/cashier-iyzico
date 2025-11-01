@@ -5,7 +5,10 @@ namespace Codenteq\Iyzico\Tests\Feature;
 use App\Models\User;
 use Codenteq\Iyzico\Enums\PaymentIntervalEnum;
 use Codenteq\Iyzico\Enums\SubscriptionStatusEnum;
+use Codenteq\Iyzico\Models\Subscription;
+use Codenteq\Iyzico\Services\SubscriptionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Iyzipay\Model\Subscription\SubscriptionPricingPlan;
 use Iyzipay\Model\Subscription\SubscriptionProduct;
@@ -14,9 +17,9 @@ use Iyzipay\Request\Subscription\SubscriptionCreatePricingPlanRequest;
 use Iyzipay\Request\Subscription\SubscriptionCreateProductRequest;
 use Tests\TestCase;
 
-class RetrySubscriptionTest extends TestCase
+class InvoiceTest extends TestCase
 {
-    use RefreshDatabase;
+    //use RefreshDatabase;
 
     private SubscriptionPricingPlan $paymentPlan;
 
@@ -49,12 +52,12 @@ class RetrySubscriptionTest extends TestCase
         $paymentPlanRequest->setPaymentIntervalCount(1);
         $paymentPlanRequest->setPaymentInterval(PaymentIntervalEnum::MONTHLY->value);
         $paymentPlanRequest->setCurrencyCode('TRY');
-        $paymentPlanRequest->SetPrice(79.99);
+        $paymentPlanRequest->SetPrice(100.00);
 
         $this->paymentPlan = SubscriptionPricingPlan::create($paymentPlanRequest, $this->options);
     }
 
-    public function test_user_can_retry_subscription()
+    public function test_invoice_download()
     {
         $user = User::factory()->create();
 
@@ -63,9 +66,9 @@ class RetrySubscriptionTest extends TestCase
                 'pricing_plan_reference_code' => $this->paymentPlan->getReferenceCode(),
                 'status' => SubscriptionStatusEnum::ACTIVE->value,
                 'invoice' => [
-                    'basePrice' =>  $this->paymentPlan->getPrice(),
-                    'taxPrice' => 0,
-                    'taxRate' => 0,
+                    'basePrice' =>  $this->paymentPlan->getPrice() - 10,
+                    'taxPrice' => 10,
+                    'taxRate' => 10,
                     'totalPrice' => $this->paymentPlan->getPrice(),
                 ],
                 'customer' => [
@@ -91,13 +94,29 @@ class RetrySubscriptionTest extends TestCase
                 ],
                 'card' => [
                     'cardHolderName' => 'Ahmet Sefa Arsiv',
-                    'cardNumber' => '4111111111111129',
+                    'cardNumber' => '5528790000000008',
                     'expireMonth' => '12',
                     'expireYear' => '2030',
                     'cvc' => '123',
                 ],
             ]);
 
-        $this->ex();
+
+        $response = $user->downloadInvoice([
+            'name' => 'Codenteq Yazılım ve Bilişim Teknolojileri A.Ş.',
+            'street' => 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+            'city' => 'Istanbul',
+            'postalCode' => '34732',
+            'country' => 'Turkey',
+            'phone' => '+905301112233',
+            'email' => 'info@codenteq.com',
+            'vatId' => '1234567890',
+            'website' => 'https://codenteq.com',
+            'accountTaxId' => "1234567890",
+            "customerTaxId" => "0987654321",
+        ]);
+
+        $this->assertTrue($response->isSuccessful());
+        $this->assertTrue($user->subscribed($this->product->getName()));
     }
 }

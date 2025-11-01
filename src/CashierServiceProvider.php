@@ -2,7 +2,9 @@
 
 namespace Codenteq\Iyzico;
 
+use Codenteq\Iyzico\Contracts\InvoiceRenderer;
 use Codenteq\Iyzico\Http\Middleware\VerifyWebhookSignature;
+use Codenteq\Iyzico\Services\InvoiceRendererService;
 use Illuminate\Support\ServiceProvider;
 
 class CashierServiceProvider extends ServiceProvider
@@ -22,6 +24,7 @@ class CashierServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'cashier-iyzico');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -38,5 +41,9 @@ class CashierServiceProvider extends ServiceProvider
         }
 
         $this->app['router']->aliasMiddleware('verify-iyzico-webhook', VerifyWebhookSignature::class);
+
+        $this->app->bind(InvoiceRenderer::class, function ($app) {
+            return $app->make(config('cashier.invoices.renderer', InvoiceRendererService::class));
+        });
     }
 }

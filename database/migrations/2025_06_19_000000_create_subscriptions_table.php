@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('iyzico_status');
             $table->string('iyzico_plan');
             $table->string('iyzico_price');
+            $table->string('base_price');
+            $table->string('tax_price');
+            $table->string('tax_rate');
             $table->timestamp('trial_ends_at')->nullable();
             $table->timestamp('ends_at')->nullable();
             $table->timestamps();
