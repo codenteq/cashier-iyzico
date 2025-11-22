@@ -15,10 +15,10 @@ class WebhookController extends Controller
     /**
      * Create a new WebhookController instance.
      */
-    public function __construct()
+/*    public function __construct()
     {
         $this->middleware(VerifyWebhookSignature::class);
-    }
+    }*/
 
     /**
      * Handle an İyzico webhook call.
@@ -27,6 +27,8 @@ class WebhookController extends Controller
     {
         $payload = $request->all();
         $method = 'handle'.str_replace('_', '', ucwords($request->iyziEventType, '_'));
+
+        info($request->all());
 
         WebhookReceived::dispatch($payload);
 
