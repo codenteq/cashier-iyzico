@@ -51,7 +51,6 @@ class Invoice
         return 'INV-' . $this->subscription->id;
     }
 
-    // Müşteri bilgileri
     public function __get($key)
     {
         $properties = [
@@ -85,13 +84,11 @@ class Invoice
         return $this->subscription->tax_rate > 0;
     }
 
-    // Toplam tutar
     public function realTotal(): string
     {
         return number_format($this->subscription->iyzico_price, 2) . ' TL';
     }
 
-    // Ödenecek tutar
     public function amountDue(): string
     {
         return $this->paid() ? '0.00 TL' : number_format($this->subscription->price, 2) . ' TL';
