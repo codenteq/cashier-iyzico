@@ -14,4 +14,10 @@ return [
     'tax' => 'Vergi',
     'amount' => 'Tutar',
     'total' => 'Toplam',
+    'subscription_started_subject' => 'Aboneliğiniz Başladı!',
+    'subscription_started_greeting' => 'Merhaba :name 👋',
+    'subscription_started_line_1' => 'Aboneliğiniz başarıyla aktif edildi.',
+    'subscription_started_line_2' => 'Hizmetlerimizi kullanmaya başlayabilirsiniz.',
+    'subscription_started_action' => 'Panele Git',
+    'subscription_started_thanks' => 'Bizi tercih ettiğiniz için teşekkür ederiz!',
 ];
