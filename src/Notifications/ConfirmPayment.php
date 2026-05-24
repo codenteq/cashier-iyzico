@@ -19,11 +19,11 @@ class ConfirmPayment extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Aboneliğiniz Başladı!')
-            ->greeting('Merhaba '.$notifiable->name.' 👋')
-            ->line('Aboneliğiniz başarıyla aktif edildi.')
-            ->line('Hizmetlerimizi kullanmaya başlayabilirsiniz.')
-            ->action('Panele Git', url('/dashboard'))
-            ->line('Bizi tercih ettiğiniz için teşekkür ederiz!');
+            ->subject(__('cashier-iyzico::app.subscription_started_subject'))
+            ->greeting(__('cashier-iyzico::app.subscription_started_greeting', ['name' => $notifiable->name]))
+            ->line(__('cashier-iyzico::app.subscription_started_line_1'))
+            ->line(__('cashier-iyzico::app.subscription_started_line_2'))
+            ->action(__('cashier-iyzico::app.subscription_started_action'), url('/dashboard'))
+            ->line(__('cashier-iyzico::app.subscription_started_thanks'));
     }
 }
