@@ -3,6 +3,8 @@
 namespace Codenteq\Iyzico\Services;
 
 use Codenteq\Iyzico\Enums\UpgradePeriodEnum;
+use Carbon\Carbon;
+use Iyzipay\Options;
 use Iyzipay\IyzipayResource;
 use Iyzipay\Model\Customer;
 use Iyzipay\Model\PaymentCard;
@@ -14,7 +16,6 @@ use Iyzipay\Model\Subscription\SubscriptionCreate;
 use Iyzipay\Model\Subscription\SubscriptionDetails;
 use Iyzipay\Model\Subscription\SubscriptionRetry;
 use Iyzipay\Model\Subscription\SubscriptionUpgrade;
-use Iyzipay\Options;
 use Iyzipay\Request\Subscription\SubscriptionActivateRequest;
 use Iyzipay\Request\Subscription\SubscriptionCancelRequest;
 use Iyzipay\Request\Subscription\SubscriptionCardUpdateWithSubscriptionReferenceCodeRequest;
@@ -166,8 +167,8 @@ class SubscriptionService
         $request->setSubscriptionReferenceCode($data['subscription_reference_code']);
         $request->setCount($data['count'] ?? 10);
         $request->setPage($data['page'] ?? 1);
-        $request->setEndDate($data['end_date']);
-        $request->setStartDate($data['start_date']);
+        $endDate = Carbon::parse($data['end_date'])->valueOf();
+        $startDate = Carbon::parse($data['start_date'])->timestamp;
         $request->setSubscriptionStatus($data['status']);
         $request->setPricingPlanReferenceCode($data['pricing_plan_reference_code']);
         $request->setCustomerReferenceCode($data['customer_reference_code']);
