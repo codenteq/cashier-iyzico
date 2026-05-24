@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Invoice</title>
+    <title>@lang('cashier-iyzico::app.title')</title>
 
     <style>
         body {
@@ -51,32 +51,30 @@
         <tr valign="top">
             <td width="180">
                 <span style="font-size: 28px;">
-                    Invoice
+                    @lang('cashier-iyzico::app.title')
 
                     @if ($invoice->paid())
-                        <span style="color: #0c0; font-size: 20px;">(Paid)</span>
+                        <span style="color: #0c0; font-size: 20px;">@lang('cashier-iyzico::app.paid')</span>
                     @endif
                 </span>
 
-                <!-- Invoice Info -->
                 <p>
                     @isset ($product)
-                        <strong>Product:</strong> {{ $product }}<br>
+                        <strong>@lang('cashier-iyzico::app.product'):</strong> {{ $product }}<br>
                     @endisset
 
-                    <strong>Date:</strong> {{ $invoice->date()->toFormattedDateString() }}<br>
+                    <strong>@lang('cashier-iyzico::app.date'):</strong> {{ $invoice->date()->toFormattedDateString() }}<br>
 
                     @if ($dueDate = $invoice->dueDate())
-                        <strong>Due date:</strong> {{ $dueDate->toFormattedDateString() }}<br>
+                        <strong>@lang('cashier-iyzico::app.due_date'):</strong> {{ $dueDate->toFormattedDateString() }}<br>
                     @endif
 
                     @if ($invoiceId = $id ?? $invoice->number())
-                        <strong>Invoice Number:</strong> {{ $invoiceId }}<br>
+                        <strong>@lang('cashier-iyzico::app.invoice_number'):</strong> {{ $invoiceId }}<br>
                     @endif
                 </p>
             </td>
 
-            <!-- Account Name / Header Image -->
             <td align="right">
                 <span style="font-size: 28px; color: #ccc;">
                     <strong>{{ $header ?? $vendor ?? $invoice->account_name }}</strong>
@@ -85,7 +83,6 @@
         </tr>
         <tr valign="top">
             <td width="50%">
-                <!-- Account Details -->
                 <strong>{{ $vendor ?? $invoice->account_name }}</strong><br>
 
                 @isset($street)
@@ -118,8 +115,7 @@
                 @endisset
             </td>
             <td width="50%">
-                <!-- Customer Details -->
-                <strong>Recipient</strong><br>
+                <strong>@lang('cashier-iyzico::app.recipient')</strong><br>
 
                 {{ $invoice->customer_name ?? $invoice->customer_email }}<br>
 
@@ -158,14 +154,12 @@
         </tr>
         <tr valign="top">
             <td colspan="2">
-                <!-- Memo / Description -->
                 @if ($invoice->description)
                     <p>
                         {{ $invoice->description }}
                     </p>
                 @endif
 
-                <!-- Extra / VAT Information -->
                 @if (isset($vatId))
                     <p>
                         {{ $vatId }}
@@ -175,21 +169,19 @@
         </tr>
         <tr>
             <td colspan="2">
-                <!-- Invoice Table -->
                 <table width="100%" class="table" border="0">
                     <tr>
-                        <th align="left">Description</th>
-                        <th align="left">Qty</th>
-                        <th align="left">Unit price</th>
+                        <th align="left">@lang('cashier-iyzico::app.description')</th>
+                        <th align="left">@lang('cashier-iyzico::app.qty')</th>
+                        <th align="left">@lang('cashier-iyzico::app.unit_price')</th>
 
                         @if ($invoice->hasTax())
-                            <th align="right">Tax</th>
+                            <th align="right">@lang('cashier-iyzico::app.tax')</th>
                         @endif
 
-                        <th align="right">Amount</th>
+                        <th align="right">@lang('cashier-iyzico::app.amount')</th>
                     </tr>
 
-                    <!-- Display The Invoice Line Items -->
                     @foreach ($invoice->invoiceLineItems() as $item)
                         <tr class="row">
                             <td>
@@ -201,7 +193,7 @@
 
                             @if ($invoice->hasTax())
                                 <td align="right">
-                                    {{$invoice->subscription->tax_price}}%
+                                    {{$invoice->subscription->tax_rate}}%
                                 </td>
                             @endif
 
@@ -209,11 +201,10 @@
                         </tr>
                     @endforeach
 
-                    <!-- Display The Final Total -->
                     <tr>
                         <td></td>
                         <td colspan="{{ $invoice->hasTax() ? 3 : 2 }}">
-                            <strong>Total</strong>
+                            <strong>@lang('cashier-iyzico::app.total')</strong>
                         </td>
                         <td align="right">
                             <strong>{{ $invoice->realTotal() }}</strong>

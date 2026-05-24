@@ -25,6 +25,7 @@ class CashierServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'cashier-iyzico');
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'cashier-iyzico');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
