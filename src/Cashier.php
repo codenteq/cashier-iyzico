@@ -12,7 +12,7 @@ class Cashier
     /**
      * The Cashier library version.
      */
-    public const VERSION = '0.2.0-beta';
+    public const VERSION = '1.0.0';
 
     /**
      * The Iyzico API version.
