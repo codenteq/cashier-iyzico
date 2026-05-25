@@ -1,5 +1,9 @@
 <p align="center"><img width="355" height="62" src="/art/logo.svg" alt="Logo Laravel Cashier Iyzico"></p>
 
+[![License](https://poser.pugx.org/codenteq/cashier-iyzico/license)](https://github.com/codenteq/cashier-iyzico/blob/master/LICENSE)
+[![Total Downloads](https://poser.pugx.org/codenteq/cashier-iyzico/d/total)](https://packagist.org/packages/codenteq/cashier-iyzico)
+[![Latest Stable Version](http://poser.pugx.org/codenteq/cashier-iyzico/v/unstable)](https://packagist.org/packages/codenteq/cashier-iyzico)
+
 ## Introduction
 
 Laravel Cashier provides an expressive, fluent interface to [Iyzico's](https://iyzico.com) subscription billing services. It handles almost all of the boilerplate subscription billing code you are dreading writing. In addition to basic subscription management, Cashier can handle coupons, swapping subscription, subscription "quantities", cancellation grace periods, and even generate invoice PDFs.
@@ -14,7 +18,7 @@ Thank you for considering contributing to Cashier! You can read the contribution
 
 ## Code of Conduct
 
-In order to ensure that the Codenteq community is welcoming to all, please review and abide by the [Code of Conduct](https://codenteq.com/contributor-covenant-code-of-conduct/).
+In order to ensure that the Codenteq community is welcoming to all, please review and abide by the [Code of Conduct](https://opensource.codenteq.com/contributor-covenant-code-of-conduct/).
 
 ## Security Vulnerabilities
 

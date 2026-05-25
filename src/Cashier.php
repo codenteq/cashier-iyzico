@@ -12,14 +12,14 @@ class Cashier
     /**
      * The Cashier library version.
      */
-    public const VERSION = '0.1.0-beta';
+    public const VERSION = '0.2.0-beta';
 
     /**
      * The Iyzico API version.
      *
      * @var string
      */
-    const IYZICO_VERSION = '2.0.59';
+    const IYZICO_VERSION = '2.0.61';
 
     /**
      * The default currency.
